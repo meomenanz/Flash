@@ -1,0 +1,8 @@
+{
+  "name": "Flash Messenger",
+  "description": "A high-speed, AI-powered real-time messenger with a sleek dark interface, user registration, and dynamic contact management.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
