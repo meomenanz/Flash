@@ -1,22 +1,26 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import App from './App.tsx';
 
-// Фикс для Gun.js: эмулируем глобальные переменные, которых нет в браузере по умолчанию
+// Глубокий фикс для Gun.js и других Node-зависимостей в браузере
 if (typeof window !== 'undefined') {
   (window as any).global = window;
-  (window as any).process = { env: {} };
+  (window as any).process = { 
+    env: { NODE_ENV: 'development' },
+    nextTick: (cb: Function) => setTimeout(cb, 0),
+    browser: true
+  };
 }
 
 const rootElement = document.getElementById('root');
-if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+} else {
+  console.error("Не удалось найти элемент #root");
 }
-
-const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
