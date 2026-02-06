@@ -3,12 +3,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 
-// Глубокий фикс для Gun.js и других Node-зависимостей в браузере
+// Безопасный фикс для Gun.js без использования TypeScript-приведения 'as any', 
+// которое путает браузерный Babel
 if (typeof window !== 'undefined') {
-  (window as any).global = window;
-  (window as any).process = { 
+  window['global'] = window;
+  window['process'] = { 
     env: { NODE_ENV: 'development' },
-    nextTick: (cb: Function) => setTimeout(cb, 0),
+    nextTick: (cb) => setTimeout(cb, 0),
     browser: true
   };
 }
@@ -21,6 +22,4 @@ if (rootElement) {
       <App />
     </React.StrictMode>
   );
-} else {
-  console.error("Не удалось найти элемент #root");
 }
